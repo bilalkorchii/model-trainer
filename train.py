@@ -32,12 +32,13 @@ def train(
     for epoch in range(1, epochs + 1):
         optimizer.zero_grad()
         out = model(X).squeeze()
-        loss = loss_fn(out, y)
+        accuracy = ((out.round() == y).sum().item()) / y.size(0)
+        loss  = loss_fn(out, y)
         loss.backward()
         optimizer.step()
 
         if epoch == 1 or epoch % log_every == 0:
-            print(f"[Epoch {epoch:03d}/{epochs}] Loss = {loss.item():.6f}")
+            print(f"[Epoch {epoch:03d}/{epochs}] Loss = {loss.item():.6f} Accuracy = {accuracy:.4f}")
 
     print("\n[INFO] Training completed ")
     return loss.item()
